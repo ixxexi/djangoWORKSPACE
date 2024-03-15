@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %} week1 {% endblock %}
+{% block headmessage %} 
+	<h3 style="font-family: 標楷體">文章列表</h3>
+{% endblock %}
+{% block content %}
+	{% for post in posts %}
+		<div class='panel panel-default'>
+			<div class='panel-heading'>
+				<p style="font-family:微軟正黑體; font-size:14pt; font-weight:bold;">
+					<a href="/post/{{ post.slug }}">{{post.title}}</a>
+				</p>
+			</div>
+			<div class='panel-body'>
+				<p>
+					{{ post.body | truncatechars:6 }}
+				</p>
+			</div>	
+			<div class='panel-footer'>
+				<p>
+					發布時間：{{ post.pud_date | date:"Y M d, h:m:s" }}
+				</p>
+			</div>
+		</div>
+
+	{% endfor %}
+{% endblock %}
+
+
+
+
+
+
