@@ -1,8 +1,28 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from mysite.models import Product
 
 # Create your views here.
+"""def disp_detail(request, sku):
+	html = '''
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Mobile</title>
+</head>
+<body>
+<h2>{}</h2>
+<hr>
+<table width=400 border=1 bgcolor="#ccffcc">
+{}
+</table>
+<a href="/list/">back</a>
+</body>
+</html>
+'''
+"""
+
 def about(request):
 	html = '''
 <!DOCTYPE html>
@@ -14,11 +34,10 @@ def about(request):
 	<h2>School</h2>
 	<hr>
 	<p>
-		Hi, I am Josh.
+		Hi, I am Steven.
 	</p>
 </body>
 </html>
-
 	'''
 
 	return HttpResponse(html)
@@ -29,7 +48,7 @@ def listing(request):
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Mobile</title>
+	<title>EV</title>
 </head>
 <body>
 <h2>Mobile</h2>
