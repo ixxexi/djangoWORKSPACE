@@ -39,7 +39,6 @@ def about(request):
 </body>
 </html>
 	'''
-
 	return HttpResponse(html)
 
 def listing(request):
@@ -67,6 +66,13 @@ def listing(request):
 		tags += "<td>{}</td>".format(p.name)
 		tags += "<td>{}</td>".format(p.price)
 		tags += "<td>{}</td></tr>".format(p.get_size_display())
-
-
 	return HttpResponse(html.format(tags))
+
+def homepage(request):
+	return render(request, "index.html", locals())
+
+def week4HW(request, ID = 4111029018, name = 'Steven', age = 20):
+	n = "{}".format(name)
+	a = "{}".format(age)
+	i = "{}".format(ID)
+	return render(request, "week4.html", locals())
