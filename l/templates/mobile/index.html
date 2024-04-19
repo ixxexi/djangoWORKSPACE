@@ -1,0 +1,37 @@
+ {% extends 'mobile/base.html' %}
+ {% block title %}中古手機{% endblock %}
+ {% block content %}
+ <div class="container" align="center">
+ 	{% for p in products %}
+ 	{% if forloop.first %}
+ 	<table>
+ 		<tr bgcolor="#cccccc">
+ 			<td width=250>庫存手機</td>
+ 			<td width=150>廠牌/型號</td>
+ 			<td width=50>出廠年</td>
+ 			<td>價格</td>
+ 		</tr>
+ 	{% endif %}
+ 	{% if p.pmodel.id == 4 %}
+ 		<tr bgcolor="{% cycle '#ffccff' '#ccffcc' %}">
+ 			<td>{{ p.nickname }} sold out</td>
+ 			<td>{{ p.pmodel.maker.name }}/{{ p.pmodel }}</td>
+ 			<td>sold out</td>
+ 			<td align=right>sold out</td>
+ 		</tr>
+ 	{% else %}
+ 		<tr bgcolor="{% cycle '#ffccff' '#ccffcc' %}">
+ 			<td><a href="{% url 'detail-url' p.id %}">{{ p.nickname }}</a></td>
+ 			<td>{{ p.pmodel.maker.name }}/{{ p.pmodel }}</td>
+ 			<td>{{ p.year }}</td>
+ 			<td align=right>{{ p.price }}</td>
+ 		</tr>
+ 	{% endif %}
+ 	{% if forloop.last %}
+ 	</table>
+ 	{% endif %}
+ 	{% empty %}
+ 	<h3>缺貨</h3>
+ 	{% endfor %}
+ </div>
+ {% endblock %}

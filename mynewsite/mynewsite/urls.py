@@ -13,20 +13,37 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, re_path
-from mysite.views import about,listing, homepage, week4HW
+from mysite.views import (
+    about,
+    listing,
+    homepage,
+    week4HW,
+    index,
+    disp_detail,
+    engtv,
+    carlist,
+)
 from mysite import views
+from mobilemarket import views as mobile
+
 
 urlpatterns = [
-    #path('admin/', admin.site.urls),
-    re_path(r'^admin/', admin.site.urls),
-    re_path(r'^$', homepage),
-    path('about/', about),
-    path('about/<int:author_no>/', about, name='about-url'),
-    path('list/', listing),
-    #path('list/<str:sku>', disp_detail),
-    path('list/<int:year>/<int:month>/<int:day>/', listing, name='list-url'),
-    path('week4/<int:ID>/<str:name>/<int:age>/', week4HW, name='week4-url'),
-
+    # path('admin/', admin.site.urls),
+    re_path(r"^admin/", admin.site.urls),
+    re_path(r"^$", index),
+    path("about/", about),
+    path("about/<int:author_no>/", about, name="about-url"),
+    path("<int:tvno>", views.index, name="tv-url"),
+    path("engtv/", engtv),
+    path("engtv/<int:tvno>", engtv, name="engtv-url"),
+    path("carlist/", carlist),
+    path("carlist/<int:maker>", carlist, name="carlist-url"),
+    path("list/", listing),
+    path("list/<str:sku>", disp_detail),
+    path("list/<int:year>/<int:month>/<int:day>/", listing, name="list-url"),
+    path("mobile/", mobile.index),
+    path("mobile/detail/<int:id>", mobile.detail, name="detail-url"),
 ]

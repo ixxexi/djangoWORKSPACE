@@ -1,15 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
-	<h2>welcome</h2>
-	<ul>
-		<li><a href="{% url 'list-url' 2016 06 06 %}">mobile</a></li>
-		<li><a href="{% url 'about-url' 9 %}">about</a></li>
-		<li><a href="{% url 'week4-url' 4111029018 'Steven' 21 %}">week4homework</a></li>
+{% extends 'base.html' %} {% block title %} News {% endblock %} {% block tvname %} {{tv.name}} {% endblock %} {% block menu %}
 
-
-</body>
-</html>
+<ul class="nav navbar-nav">
+	<li class="active"><a href="/">Home</a></li>
+	{% for tv in tv_list %}
+	<li><a href="{% url 'tv-url' forloop.counter0 %}">{{ tv.name }}</a></li>
+	{% endfor %}
+</ul>
+{% endblock %} {% block content %}
+<div class="container">
+	<div id="tvcode" align="center">
+		{% if hour > 18 %} 晚安! {% else %} 早安! {% endif %}
+		<br />
+		<<iframe
+			width="560"
+			height="315"
+			src="https://www.youtube.com/embed/{{tv.tvcode}}"
+			title="YouTube video player"
+			frameborder="0"
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+			referrerpolicy="strict-origin-when-cross-origin"
+			allowfullscreen
+		></iframe>
+	</div>
+</div>
+{% endblock %}
