@@ -46,4 +46,4 @@ urlpatterns = [
     path("list/<int:year>/<int:month>/<int:day>/", listing, name="list-url"),
     path("mobile/", mobile.index),
     path("mobile/detail/<int:id>", mobile.detail, name="detail-url"),
-]
+]   
