@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+from .route import Mydb2Router
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,9 +82,29 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
-    }
+    },
+    "mydb2": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "mydb2",
+        "USER": "nchumis",
+        "PASSWORD": "",
+        "PORT": "",
+        "OPTIONS": {
+            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
+    },
+    "mydb3": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "mydb3",
+        "USER": "root",
+        "PASSWORD": "",
+        "PORT": "",
+        "OPTIONS": {
+            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
+    },
 }
-
+DATABASE_ROUTERS = ["mynewsite.route.Mydb2Router"]
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

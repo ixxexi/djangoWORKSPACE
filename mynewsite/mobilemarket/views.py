@@ -10,7 +10,7 @@ def index(request):
 
 def detail(request, id):
     try:
-        Product.objects.get(id=id)
+        product = Product.objects.get(id=id)
         images = PPhoto.objects.filter(products=product)
     except:
         pass
