@@ -28,6 +28,7 @@ from mysite.views import (
 )
 from mysite import views
 from mobilemarket import views as mobile
+import board.views as board
 
 
 urlpatterns = [
@@ -46,4 +47,5 @@ urlpatterns = [
     path("list/<int:year>/<int:month>/<int:day>/", listing, name="list-url"),
     path("mobile/", mobile.index),
     path("mobile/detail/<int:id>", mobile.detail, name="detail-url"),
+    path("board/", board.index),
 ]

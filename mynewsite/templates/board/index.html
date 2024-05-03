@@ -1,0 +1,73 @@
+{%extends 'board/base.html'%} {%block title%}留言板{%endblock%} {%block content%}
+<!-- <div class="container">
+	<form name="myform" action="/board" , method="get">
+		<label for="user_id">User ID:</label>
+		<input type="text" name="user_id" id="user_id" />
+		<label for="user_pass">Your Password:</label>
+		<input type="password" name="user_pass" id="user_pass" />
+		<label for="byear">出生年：</label>
+		<select name="byear">
+			{%for year in years%}
+			<option value="{{year}}">{{year}}</option>
+			{%endfor%}
+		</select>
+		<br />
+		<input type="checkbox" name="fcolor" value="red" />紅色 <input type="checkbox" name="fcolor" value="green" />綠色
+		<input type="checkbox" name="fcolor" value="blue" />藍色 <input type="checkbox" name="fcolor" value="yellow" />黃色
+		<br />
+		<input type="submit" value="登入" />
+		<input type="reset" value="重設" />
+	</form>
+	Your ID: {{uid | default:"未輸入"}}<br />
+	{%if verified%}
+	<em>登入成功</em>
+	{%else%}
+	<em>登入失敗</em>
+	{%endif%}
+	<br />
+	出生年：{{byear}}
+	<br />
+	你喜歡的顏色： {%for color in fcolor%} {{color}} {%endfor%} -->
+<div class="container">
+	{%if message%}
+	<div class="alert alert-warning">{{message}}</div>
+	{%endif%}
+
+	<form name="myform" action="/board" method="get">
+		心情： {%for mood in moods%}
+		<input type="radio" name="mood" value="{{mood.status}}" />{{mood.status}} {%endfor%}<br />
+		留言板：<br />
+		<textarea name="user_post" rows="5" cols="50"></textarea><br />
+		<label for="user_id">暱稱:</label>
+		<input type="text" name="user_id" id="user_id" /><br />
+		<label for="user_pass">張貼/刪除密碼:</label>
+		<input type="password" name="user_pass" id="user_pass" /><br />
+		<label for="user_byear">出生年:</label>
+		<select name="byear">
+			{%for year in years%}
+			<option value="{{year}}">{{year}}</option>
+			{%endfor%}</select
+		><br />
+		<input type="submit" value="張貼" />
+		<input type="reset" value="清除" />
+	</form>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel-heading" align="center"><h3>留言板</h3></div>
+		</div>
+	</div>
+	<div class="row">
+		{%for post in posts%}
+		<div class="col-sm-12 col-md-4">
+			<div class="panel panel-primary">
+				<div class="panel-heading">{{post.nickname}}覺得{{post.mood}}</div>
+				<div class="panel-body">{{post.message|linebreaks}}</div>
+				<div class="panel-footer" align="right">
+					<i><small>出生年：{{post.byear}} 發布時間：{{post.pub_time}}</small></i>
+				</div>
+			</div>
+		</div>
+		{%endfor%}
+	</div>
+</div>
+{%endblock%}

@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-from .route import Mydb2Router
+from .route import Mydb2Router, Mydb3Router
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "mysite",
     "django.contrib.humanize",
     "mobilemarket",
+    "board",
 ]
 
 MIDDLEWARE = [
@@ -96,7 +97,7 @@ DATABASES = {
     "mydb3": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "mydb3",
-        "USER": "root",
+        "USER": "nchumis",
         "PASSWORD": "",
         "PORT": "",
         "OPTIONS": {
@@ -104,7 +105,7 @@ DATABASES = {
         },
     },
 }
-DATABASE_ROUTERS = ["mynewsite.route.Mydb2Router"]
+DATABASE_ROUTERS = ["mynewsite.route.Mydb2Router", "mynewsite.route.Mydb3Router"]
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
