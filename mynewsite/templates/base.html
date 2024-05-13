@@ -34,7 +34,9 @@
 		<nav class="navbar navbar-default">
 			<div class="container-fluid">
 				<div class="navbar-header">
-					<div class="navbar-brand">LIVE:{% block tvname %} {% endblock %}<img src="{% static '/images/mlogo2.png' %}" width="60" /></div>
+					<div class="navbar-brand">
+						LIVE:{% block tvname %} {% endblock %}<img src="{% static '/images/{{movie.image}}.png' %}" width="60" />
+					</div>
 					{% block menu %} {% endblock %}
 				</div>
 			</div>
