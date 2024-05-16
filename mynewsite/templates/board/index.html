@@ -1,4 +1,13 @@
 {%extends 'board/base.html'%} {%block title%}留言板{%endblock%} {%block content%}
+<script type="text/javascript">
+	function go_delete(id) {
+		var user_pass = document.getElementById("user_pass").value;
+		if (user_pass != "") {
+			var url = "/board/delete/" + id + "/" + user_pass;
+			window.location = url;
+		}
+	}
+</script>
 <!-- <div class="container">
 	<form name="myform" action="/board" , method="get">
 		<label for="user_id">User ID:</label>
@@ -64,6 +73,7 @@
 				<div class="panel-body">{{post.message|linebreaks}}</div>
 				<div class="panel-footer" align="right">
 					<i><small>出生年：{{post.byear}} 發布時間：{{post.pub_time}}</small></i>
+					<span class="glyphicon glyphicon-trash" onclick="go_delete('{{post.id}}')" , style="cursor: pointer"></span>
 				</div>
 			</div>
 		</div>

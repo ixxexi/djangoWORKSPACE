@@ -48,4 +48,6 @@ urlpatterns = [
     path("mobile/", mobile.index),
     path("mobile/detail/<int:id>", mobile.detail, name="detail-url"),
     path("board/", board.index),
+    path("board/delete/<int:pid>/<str:del_pass>", board.index),
+    path("board/post/", board.posting),
 ]
