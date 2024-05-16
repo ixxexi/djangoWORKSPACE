@@ -66,3 +66,16 @@ def posting(request):
     except:
         user_id = None
         message = "未填寫完整"
+
+    if user_id != None:
+        mood = models.Mood.objects.get(status=user_mood)
+        post = models.Post.objects.create(
+            mood=mood,
+            nickname=user_id,
+            message=user_post,
+            del_pass=user_pass,
+            byear=user_byear,
+        )
+        post.save()
+        message = "成功儲存"
+    return render(request, "board/posting.html", locals())
