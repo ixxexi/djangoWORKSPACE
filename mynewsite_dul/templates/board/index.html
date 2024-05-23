@@ -1,0 +1,7 @@
+{%extends 'board/base.html'%} {%block title%}留言板{%endblock%} {%block content%}
+<div class="container">
+	{%if message%}
+	<div class="alert alert-warning">{{message}}</div>
+	{%endif%}
+</div>
+{%endblock%}

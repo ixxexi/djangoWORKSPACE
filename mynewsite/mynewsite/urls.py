@@ -29,7 +29,7 @@ from mysite.views import (
 from mysite import views
 from mobilemarket import views as mobile
 import board.views as board
-
+from django.conf.urls import include
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -50,4 +50,7 @@ urlpatterns = [
     path("board/", board.index),
     path("board/delete/<int:pid>/<str:del_pass>", board.index),
     path("board/post/", board.posting),
+    path("board/list/", board.listing),
+    path("board/contact/", board.contact),
+    re_path(r"^captcha/", include("captcha.urls")),
 ]
