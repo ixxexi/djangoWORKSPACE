@@ -44,7 +44,14 @@ INSTALLED_APPS = [
     "mobilemarket",
     "board",
     "captcha",
+    "registration",
 ]
+ACCOUNT_ACTIVATION_DAYS = 7
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "steven68516291@gmail.com"
+EMAIL_HOST_PASSWORD = "enamfndwqfapryhk"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

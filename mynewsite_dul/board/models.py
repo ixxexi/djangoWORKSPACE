@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib import auth
 
 
 # Create your models here.
@@ -7,6 +8,27 @@ class Mood(models.Model):
 
     def __str__(self):
         return self.status
+
+
+class Diary(models.Model):
+    user = models.ForeignKey(auth.models.User, on_delete=models.CASCADE)
+    budget = models.FloatField(default=0)
+    weight = models.FloatField(default=0)
+    note = models.TextField()
+    created_at = models.DateTimeField()
+
+    def __str__(self):
+        return "{}({})".format(self.user.username, self.created_at)
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(auth.models.User, on_delete=models.CASCADE)
+    height = models.IntegerField(default=170)
+    male = models.BooleanField(default=True)
+    website = models.URLField(blank=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 class Post(models.Model):
@@ -39,3 +61,12 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.user_message
+
+
+class User(models.Model):
+    username = models.CharField(max_length=10, null=False)
+    email = models.EmailField()
+    password = models.CharField(max_length=10, null=False)
+
+    def __str__(self):
+        return self.username

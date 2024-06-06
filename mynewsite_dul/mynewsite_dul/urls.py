@@ -53,4 +53,8 @@ urlpatterns = [
     path("board/list/", board.listing),
     path("board/contact/", board.contact),
     re_path(r"^captcha/", include("captcha.urls")),
+    path("board/login/", board.login),
+    path("board/logout/", board.logout),
+    path("board/profile/", board.profile),
+    path("accounts/", include("registration.backends.default.urls")),
 ]

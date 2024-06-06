@@ -1,0 +1,21 @@
+{%extends 'board/base.html'%} {%block title%}留言板{%endblock%} {%block content%}
+<div class="container">
+	{%for message in messages%}
+	<div class="alert alert-{{message.tags}}">{{message}}</div>
+	{%endfor%}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-heading" align="center">私人日記</div>
+			</div>
+		</div>
+	</div>
+	<form action="." method="POST">
+		{%csrf_token%}
+		<table>
+			{{login_form.as_table}}
+		</table>
+		<input type="submit" value="登入" />
+	</form>
+</div>
+{%endblock%}

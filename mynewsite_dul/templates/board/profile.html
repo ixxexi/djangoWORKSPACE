@@ -1,0 +1,24 @@
+{%extends 'board/base.html'%} {%block title%}私人日記{%endblock%} {%block content%}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-primary">
+				<div class="panel-heading" align="center">{{profile.user.username | upper}}</div>
+				<div class="panel panel-body">
+					電子郵件：{{profile.user.email}}<br />
+					身高：{{profile.height}}cm<br />
+					性別：{{profile.male|yesno:"男,女"}}<br />
+					個人網站<a href="{{profile.website}}">{{profile.website}}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<form name="myform" action="." method="POST">
+		{%csrf_token%}
+		<table>
+			{{profile_form.as_table}}
+		</table>
+		<input type="submit" value="修改資料" />
+	</form>
+</div>
+{%endblock%}

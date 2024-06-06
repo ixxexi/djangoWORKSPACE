@@ -2,35 +2,86 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from board import models
 from . import forms
+from django.contrib.sessions.models import Session
+from django.contrib import messages, auth
+from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
+from .models import Profile
 
 
 # Create your views here.
 def index(request, pid=None, del_pass=None):
-    if request.session.test_cookie_worked():
-        request.session.delete_test_cookie()
-        message = "Cookies 測試成功"
-    else:
-        message = "Cookies 無法使用"
-    request.session.set_test_cookie()
+    # request.session.set_test_cookie()
+    # if request.session.test_cookie_worked():
+    #     request.session.delete_test_cookie()
+    #     message = "Cookies 測試成功"
+    # else:
+    #     message = "Cookies 無法使用"
+    # request.session.set_test_cookie()
+    if request.user.is_authenticated:
+        username = request.user.username
+        useremail = request.user.email
+        try:
+            user = auth.models.User.objects.get(username=username)
+            diaries = models.Diary.objects.filter(user=user).order_by("-created_at")
+        except:
+            pass
     return render(request, "board/index.html", locals())
 
 
-def posting(request):
-    years = range(1960, 2021)
-    posts = models.Post.objects.filter(enabled=True).order_by("-pub_time")[:30]
-    moods = models.Mood.objects.all()
-    post_form = forms.PostForm()
+def login(request):
     if request.method == "POST":
-        post_form = forms.PostForm(request.POST)
-        if post_form.is_valid():
-            message = "成功儲存"
-            post_form.save()
-            return HttpResponseRedirect("/board/list/")
+        login_form = forms.LoginForm(request.POST)
+        if login_form.is_valid():
+            username = request.POST["username"].strip()
+            password = request.POST["password"].strip()
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    auth.login(request, user)
+                    messages.add_message(request, messages.SUCCESS, "成功登入")
+                    return HttpResponseRedirect("/board/")
+                else:
+                    messages.add_message(request, messages.WARNING, "帳號未啟用")
+            else:
+                messages.add_message(request, messages.WARNING, "登入失敗")
         else:
-            message = "資料有誤"
+            messages.add_message(request, messages.INFO, "請檢查輸入的欄位")
     else:
-        post_form = forms.PostForm()
-        message = "請輸入資料"
+        login_form = forms.LoginForm()
+    return render(request, "board/login.html", locals())
+
+
+def logout(request):
+    auth.logout(request)
+    messages.add_message(request, messages.INFO, "成功登出")
+    return HttpResponseRedirect("/board/")
+
+
+@login_required(login_url="/board/login/")
+def posting(request):
+    # years = range(1960, 2021)
+    # posts = models.Post.objects.filter(enabled=True).order_by("-pub_time")[:30]
+    # moods = models.Mood.objects.all()
+    post_form = forms.PostForm()
+    if request.user.is_authenticated:
+        username = request.user.username
+        useremail = request.user.email
+    messages.get_messages(request)
+
+    if request.method == "POST":
+        user = auth.models.User.objects.get(username=username)
+        diary = models.Diary(user=user)
+        post_form = forms.DiaryForm(request.POST, instance=diary)
+        if post_form.is_valid():
+            messages.add_message(request, messages.INFO, "日記已儲存")
+            post_form.save()
+            return HttpResponseRedirect("/board/")
+        else:
+            messages.add_message(request, messages.WARNING, "請檢查輸入的欄位")
+    else:
+        post_form = forms.DiaryForm()
+        messages.add_message(request, messages.WARNING, "請檢查輸入的欄位")
     return render(request, "board/posting.html", locals())
     # try:
     #     user_id = request.POST["user_id"]
@@ -78,3 +129,26 @@ def contact(request):
     else:
         form = forms.ContactForm()
     return render(request, "board/contact.html", locals())
+
+
+@login_required(login_url="/board/login/")
+def profile(request):
+    if request.user.is_authenticated:
+        username = request.user.username
+    user = auth.models.User.objects.get(username=username)
+    try:
+        profile = models.Profile.objects.get(user=user)
+    except:
+        profile = Profile(user)
+
+    if request.method == "POST":
+        profile_form = forms.ProfileForm(request.POST, instance=profile)
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.add_message(request, messages.INFO, "個人資料已儲存")
+            return HttpResponseRedirect("/board/profile/")
+        else:
+            messages.add_message(request, messages.WARNING, "請檢查輸入的欄位")
+    else:
+        profile_form = forms.ProfileForm()
+    return render(request, "board/profile.html", locals())
