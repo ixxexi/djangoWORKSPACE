@@ -6,12 +6,17 @@ from .models import Auctions, Bids
 from django.contrib.auth.models import User
 
 def Index(request):
-    # Fetch auctions that are currently active, or use another criterion for "featured"
-    featuredAuctions = Auctions.objects.filter(end_time__gt=timezone.now()).order_by('end_time')
+    # Fetch auctions that are currently active
+    live_Auctions = Auctions.objects.filter(end_time__gt=timezone.now()).order_by('end_time')
     
-    # Pass the current time and the featured auctions to the template
+    # Fetch auctions that have ended
+    ended_Auctions = Auctions.objects.filter(end_time__lte=timezone.now()).order_by('-end_time')
+    
+    # Pass the auctions to the template
     context = {
-        'featuredAuctions': featuredAuctions,
+        'liveAuctions': live_Auctions,
+        'endedAuctions': ended_Auctions,
         'now': timezone.now(),
     }
+    return render(request, 'index.html', context)
     return render(request, 'index.html', context)
