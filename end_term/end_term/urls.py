@@ -21,6 +21,8 @@ from mainsite import views as mainsite_views
 from account import views as account_views
 from django.urls import re_path
 from django.urls import include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -30,4 +32,4 @@ urlpatterns = [
     path('register/', account_views.Register, name='register'),
     re_path(r"^captcha/", include("captcha.urls")),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
