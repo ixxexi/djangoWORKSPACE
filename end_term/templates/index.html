@@ -1,0 +1,40 @@
+<div class="container mt-4">
+    <h1>Welcome to Our Auction Site</h1>
+    <p>Discover amazing items and participate in exciting auctions.</p>
+    
+    {% if not featuredAuctions %}
+        <div class="alert alert-info" role="alert">
+            There are no featured auctions at the moment. Check back later!
+        </div>
+    {% else %}
+        <div class="featured-auctions-container" style="max-height: 600px; overflow-y: auto;">
+            {% for auction in featuredAuctions %}
+                {% with currentTime=now|date:"Y-m-d H:i:s" auctionEndTime=auction.end_time %}
+                    {% if auctionEndTime|date:"U" > currentTime|date:"U" %}
+                        {% assign auctionClass="live-auction" %}
+                    {% else %}
+                        {% assign auctionClass="ended-auction" %}
+                    {% endif %}
+                    
+                    <a href="{% url 'auction_detail' auction.auction_id %}" style="text-decoration: none; color: inherit;">
+                        <div class="card mb-3 {{ auctionClass }}" style="max-width: 540px;">
+                            <div class="row g-0">
+                                <div class="col-md-12">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ auction.title }}</h5>
+                                        <p class="card-text">{{ auction.description }}</p>
+                                        {% if auctionEndTime|date:"U" > currentTime|date:"U" %}
+                                            <p class="card-text"><small class="text-muted">Ends on: {{ auctionEndTime }}</small></p>
+                                        {% else %}
+                                            <p class="card-text"><small class="text-muted">Ended at: {{ auctionEndTime }}</small></p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endwith %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
