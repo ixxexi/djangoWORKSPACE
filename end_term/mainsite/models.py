@@ -4,7 +4,7 @@ from django.conf import settings
 
 # Create your models here.
 
-class Auction(models.Model):
+class Auctions(models.Model):
     auction_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=255)
@@ -17,7 +17,7 @@ class Auction(models.Model):
     def __str__(self):
         return self.title
 
-class Bid(models.Model):
+class Bids(models.Model):
     bid_id = models.AutoField(primary_key=True)
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
