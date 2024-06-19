@@ -7,34 +7,39 @@
             There are no featured auctions at the moment. Check back later!
         </div>
     {% else %}
-        <div class="featured-auctions-container" style="max-height: 600px; overflow-y: auto;">
-            {% for auction in featuredAuctions %}
-                {% with currentTime=now|date:"Y-m-d H:i:s" auctionEndTime=auction.end_time %}
-                    {% if auctionEndTime|date:"U" > currentTime|date:"U" %}
-                        {% assign auctionClass="live-auction" %}
-                    {% else %}
-                        {% assign auctionClass="ended-auction" %}
-                    {% endif %}
-                    
-                    <a href="{% url 'auction_detail' auction.auction_id %}" style="text-decoration: none; color: inherit;">
-                        <div class="card mb-3 {{ auctionClass }}" style="max-width: 540px;">
-                            <div class="row g-0">
-                                <div class="col-md-12">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ auction.title }}</h5>
-                                        <p class="card-text">{{ auction.description }}</p>
+    <div class="featured-auctions-container" style="max-height: 600px; overflow-y: auto;">
+        {% for auction in featuredAuctions %}
+            {% with currentTime=now|date:"Y-m-d H:i:s" auctionEndTime=auction.end_time %}
+                <a href="{% url 'auction_detail' auction.auction_id %}" style="text-decoration: none; color: inherit;">
+                    <div class="card mb-3 {% if auctionEndTime|date:'U' > currentTime|date:'U' %}live-auction{% else %}ended-auction{% endif %}" style="max-width: 540px;">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                {% if auction.image %}
+                                    <img src="{{ auction.image.url }}" class="img-fluid rounded-start" alt="{{ auction.title }}">
+                                {% endif %}
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ auction.title }}</h5>
+                                    <p class="card-text">{{ auction.description }}</p>
+                                    <p class="card-text"><small class="text-muted">Starting bid: {{ auction.starting_bid }}</small></p>
+                                    {% if auction.current_bid %}
+                                        <p class="card-text"><small class="text-muted">Current bid: {{ auction.current_bid }}</small></p>
+                                    {% endif %}
+                                    <p class="card-text"><small class="text-muted">
                                         {% if auctionEndTime|date:"U" > currentTime|date:"U" %}
-                                            <p class="card-text"><small class="text-muted">Ends on: {{ auctionEndTime }}</small></p>
+                                            Ends on: {{ auction.end_time }}
                                         {% else %}
-                                            <p class="card-text"><small class="text-muted">Ended at: {{ auctionEndTime }}</small></p>
+                                            Ended at: {{ auction.end_time }}
                                         {% endif %}
-                                    </div>
+                                    </small></p>
                                 </div>
                             </div>
                         </div>
-                    </a>
-                {% endwith %}
-            {% endfor %}
-        </div>
+                    </div>
+                </a>
+            {% endwith %}
+        {% endfor %}
+    </div>
     {% endif %}
 </div>
