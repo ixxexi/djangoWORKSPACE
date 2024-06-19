@@ -19,7 +19,7 @@ class Auctions(models.Model):
 
 class Bids(models.Model):
     bid_id = models.AutoField(primary_key=True)
-    auction = models.ForeignKey(Auction, on_delete=models.CASCADE, null=True)
+    auction = models.ForeignKey(Auctions, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     bid_amount = models.DecimalField(max_digits=10, decimal_places=2)
 
