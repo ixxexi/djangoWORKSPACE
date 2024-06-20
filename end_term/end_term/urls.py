@@ -18,23 +18,30 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from mainsite import views as mainsite_views
-from account import views as account_views
+from user_account.views import custom_logout
+from user_account import views as account_views
 from django.urls import re_path
 from django.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('account/', account_views.Account, name='account'),
+    path("account/", account_views.Account, name="account"),
     path("", mainsite_views.index, name="index"),
-    path('accounts/login/', account_views.Login, name='login'),
-    path('accounts/register/', account_views.Register, name='register'),
+    path("accounts/login/", account_views.Login, name="login"),
+    path("accounts/register/", account_views.Register, name="register"),
     re_path(r"^captcha/", include("captcha.urls")),
-    path('auction/<int:auction_id>/', mainsite_views.auction_detail, name='auction_detail'),
-    path('accounts/logout/', LogoutView.as_view(next_page = 'index'), name='logout'),
-    path('auction/delete/<int:auction_id>/', account_views.delete_auction, name='delete_auction'),
-    path('auction/new/', mainsite_views.create_auction, name='new_auction'),
-
+    path(
+        "auction/<int:auction_id>/",
+        mainsite_views.auction_detail,
+        name="auction_detail",
+    ),
+    path("logout/", custom_logout, name="logout"),
+    path(
+        "auction/delete/<int:auction_id>/",
+        account_views.delete_auction,
+        name="delete_auction",
+    ),
+    path("auction/new/", mainsite_views.create_auction, name="new_auction"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,24 +1,19 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
-
-{% block title %}Create New Auction{% endblock %}
+{% block title %}Register{% endblock %}
 {% block content %}
 <div class="centered-container-wrapper">
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <h2 class="card-title text-center mb-4">發起拍賣</h2>
+                <h3 class="card-header text-center mb-4">註冊</h3>
                 <div class="card-body">
-                    <form action="" method="post" enctype="multipart/form-data">
+                    <form action="{% url 'register' %}" method="post">
                         {% csrf_token %}
                         {% for field in form %}
                             <div class="form-group">
                                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                {% if field.name == 'image' %}
-                                    <input type="file" name="{{ field.name }}" id="{{ field.id_for_label }}" class="form-control-file">
-                                {% else %}
-                                    {% render_field field class="form-control" id=field.id_for_label %}
-                                {% endif %}
+                                {% render_field field class="form-control" id=field.id_for_label %}
                                 {% if field.help_text %}
                                     <small class="form-text text-muted">{{ field.help_text }}</small>
                                 {% endif %}
@@ -27,9 +22,12 @@
                                 {% endfor %}
                             </div>
                         {% endfor %}
-                        <button type="submit" class="btn btn-primary">刊登</button>
+                        <button type="submit" class="btn btn-primary">註冊</button>
                     </form>
                 </div>
+            </div>
+            <div class="text-center mt-3">
+                <a href="{% url 'login' %}">已經有帳號了嗎？在這裡登入</a>
             </div>
         </div>
     </div>

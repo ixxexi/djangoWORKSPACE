@@ -1,96 +1,106 @@
 {% extends "base.html" %}
 {% block title %}Auction Detail{% endblock %}
-
-{%block content %}
-{% include "navbar.html" %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const endTimeElement = document.getElementById('auctionEndTime');
-        const endTime = new Date(endTimeElement.dataset.endtime);
-    
-        function updateCountdown() {
-            const now = new Date();
-            let timeLeft = endTime - now;
-    
-            if (timeLeft < 0) {
-                endTimeElement.innerHTML = "Auction has ended";
-                clearInterval(intervalId);
-                return;
-            }
-    
-            // Calculate days, hours, minutes, and seconds left
-            let days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-            let hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            let minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            let seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-    
-            endTimeElement.innerHTML = `Ends in ${days}d ${hours}h ${minutes}m ${seconds}s`;
-        }
-    
-        let intervalId = setInterval(updateCountdown, 1000);
-    });
-</script>
-{% if auction %}
-    <div class="card" style="width: 80%; margin: auto; margin-top: 20px; margin-bottom: 20px;">
-        <div class="card-body">
-            <h5 class="card-title">{{ auction.title|escape }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Starting Bid: {{ auction.starting_bid|escape }}</h6>
-            <p class="card-text">{{ auction.description|escape }}</p>
-            <ul class="list-group list-group-flush">
-                {% if auction.current_bid %}
-                    <li class="list-group-item">Current Bid: {{ auction.current_bid|escape }} by {{ highest_bidder|escape }}</li>
-                {% else %}
-                    <li class="list-group-item">No bids placed yet.</li>
+{% block content %}
+<div class="centered-container-wrapper">
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                {% if auction %}
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card mb-4">
+                                {% if auction.image %}
+                                <img src="{{ auction.image.url }}" class="card-img-top" alt="{{ auction.title|escape }}" style="max-width: 100%; height: auto; max-height: 400px;">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ auction.title|escape }}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">起標價：{{ auction.starting_bid|escape }}</h6>
+                                    <p class="card-text">{{ auction.description|escape }}</p>
+                                    {% if not is_active %}
+                                        {% if highest_bidder %}
+                                            <div class="alert alert-success" role="alert">
+                                                <h3 class="alert-heading">贏家是：{{ highest_bidder|escape }}</h3>
+                                                <p>得標價格：{{ auction.current_bid|escape }}</p>
+                                            </div>
+                                        {% else %}
+                                            <div class="alert alert-warning" role="alert">沒有人下標</div>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if auction.current_bid %}
+                                            <div class="alert alert-info" role="alert">目前價格：{{ auction.current_bid|escape }} ，由 {{ highest_bidder|escape }} 提出</div>
+                                        {% else %}
+                                            <div class="alert alert-warning" role="alert">還沒有人下標</div>
+                                        {% endif %}
+                                    {% endif %}
+                                    <p class="card-text">
+                                        狀態：
+                                        {% if is_active %}
+                                            進行中, 在 <span id="auctionEndTime" data-endtime="{{ auction.end_time|date:"Y-m-d H:i:s" }}"></span> 內結束
+                                        {% else %}
+                                            已結束
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% if is_active %}
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">下標</h5>
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="bid_amount">下標價格</label>
+                                            <input type="number" class="form-control" id="bid_amount" name="bid_amount" step="1" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" name="place_bid">下標</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
                 {% endif %}
-                <li class="list-group-item">Status: 
-                    {% if is_active %}
-                        Active - Ends on {{ auction.end_time|date:"D, d M Y H:i" }}
-                    {% else %}
-                        Ended
-                    {% endif %}
-                </li>
-            </ul>
-        </div>
-    </div>
-{% endif %}
-
-{% if is_active %}
-    <div class="card" style="width: 80%; margin: auto; margin-top: 20px; margin-bottom: 20px;">
-        <div class="card-body">
-            <h5 class="card-title">Place Your Bid</h5>
-            <form method="POST">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="bid_amount">Bid Amount:</label>
-                    <input type="number" class="form-control" id="bid_amount" name="bid_amount" step="1" required>
-                </div>
-                <button type="submit" class="btn btn-primary" name="place_bid">Place Bid</button>
-            </form>
-            <p class="mt-3">Auction ends in: {{ endsIn }}</p>
-        </div>
-    </div>
-{% endif %}
-
-{% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}" role="alert" style="width: 80%; margin: auto; margin-top: 20px;">
-            {{ message }}
-        </div>
-    {% endfor %}
-{% endif %}
-
-{% if not is_active %}
-    {% if highest_bidder %}
-        <div class="card" style="width: 80%; margin: auto; margin-top: 20px; margin-bottom: 20px; background-color: #FFF9C4;">
-            <div class="card-header"><h3>Auction Winner: {{ highest_bidder|escape }}</h3></div>
-            <div class="card-body">
-                <p>End Bid: {{ auction.current_bid|escape }}</p>
             </div>
         </div>
-    {% else %}
-        <div class="card" style="width: 80%; margin: auto; margin-top: 20px; margin-bottom: 20px; background-color: #FFF9C4;">
-            <div class="card-header"><h3>No bids were placed.</h3></div>
-        </div>
-    {% endif %}
-{% endif %}
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const endTimeElement = document.getElementById("auctionEndTime");
+        if (endTimeElement) {
+            // Parse the end time as UTC
+            const endTimeUTC = new Date(endTimeElement.dataset.endtime.replace(' ', 'T') + 'Z');
+            
+            const updateCountdown = () => {
+                const now = new Date();
+                // Convert 'now' to UTC by subtracting the timezone offset
+                const nowUTC = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
+        
+                // Calculate the distance between now (in UTC) and the end time in UTC
+                const distance = endTimeUTC - nowUTC;
+        
+                if (distance < 0) {
+                    clearInterval(interval);
+                    endTimeElement.innerHTML = "Auction has ended";
+                    return;
+                }
+        
+                // Calculate days, hours, minutes, and seconds
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+                // Update the countdown display
+                endTimeElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            };
+        
+            // Start the countdown
+            updateCountdown();
+            const interval = setInterval(updateCountdown, 1000);
+        }
+    });
+</script>
 {% endblock %}

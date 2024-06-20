@@ -12,57 +12,156 @@
     <!-- jQuery library -->
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <style>
-        html, body {
-            height: 100%;
-        }
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .sidebar {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            left: 0;
-            background-color: #111;
-            overflow-x: hidden;
-            transition: 0.5s;
-            padding-top: 60px;
-        }
-
-        .sidebar a {
-            padding: 10px 15px;
-            text-decoration: none;
-            font-size: 25px;
-            color: #818181;
-            display: block;
-            transition: 0.3s;
-        }
-
-        .sidebar a:hover {
-            color: #f1f1f1;
-        }
-
-		.sidebar-toggle {
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        background-color: transparent;
-        border: none;
-        font-size: 24px;
-        color: #333; /* Change as needed */
-        cursor: pointer;
+    html, body {
+        height: 100%;
+        margin: 0;
     }
-
+    body {
+        background-color: #e2e2e2;
+    }
+    
+    .message-container {
+        max-width: 80%; 
+        margin: 0 auto; 
+        padding-top: 20px; 
+    }
+    .centered-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    }
+    .centered-container-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* This ensures that the wrapper takes at least the full height of the viewport */
+    }   
+    .container, .container-fluid {
+        padding: 2rem 1rem;
+        max-width: 1140px;
+    }
+    h1, h2 {
+        color: #333; 
+    }
+    .card {
+        border: none; 
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+        transition: transform 0.3s;
+        border-radius: 1rem;
+        position: relative;
+        padding-top: 10px;
+    }
+    .card:hover {
+        transform: scale(1.02); 
+    }
+    .text-muted {
+        font-size: 1.3rem;
+    }
+    .card-img-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 130px;
+        height: 130px;
+        overflow: hidden;
+    }
+    .card-img {
+        width: 100%;
+        height: auto;
+        object-fit: cover; 
+    }
+    .card-body {
+        min-height: 180px;
+        padding: 2rem;
+    }
+    .card-title {
+        margin-bottom: 0.75rem;
+        font-size: 2rem; 
+    }
+    .card-text {
+        font-size: 1.5rem; 
+        color: #555; 
+    }
+    .small-card {
+        width: 75%; 
+        margin: auto; 
+        padding: 10px;
+    }
+    .alert-info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border-color: #bee5eb;
+        padding: 0.75rem 1.25rem;
+        border-radius: 0.25rem;
+    }
+    .text-center {
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+    @media (max-width: 768px) {
+        .container, .container-fluid {
+            padding: 1rem;
+        }
+    }
+    .sidebar {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #c6c6c6;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+    }
+    .sidebar a {
+        padding: 10px 15px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #000000;
+        display: block;
+        transition: 0.5s;
+    }
+    .sidebar a:hover {
+        color: #f1f1f1;
+    }
+    .sidebar-toggle {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    color: #533c77;
+    cursor: pointer;
+    }
     .sidebar-toggle:focus {
         outline: none;
+    }
+    .sidebar ul {
+    list-style-type: none; 
+    padding: 0; 
+    }
+    .sidebar li {
+        padding-left: 0;
     }
     </style>
 </head>
 <body>
+    {% include "navbar.html" %}
+    {% if messages %}
+    <div class="message-container">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
     {% block content %}{% endblock %}
     {% include "footer.html" %}
 </body>

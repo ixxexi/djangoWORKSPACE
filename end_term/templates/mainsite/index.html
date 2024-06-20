@@ -1,80 +1,72 @@
 {% extends "base.html" %}
 {% block title %}Auction Site{% endblock %}
 
-{%block content %}
-{% include "navbar.html" %}
-<div class="container mt-4">
-    <h1>Welcome to Our Auction Site</h1>
-    <p>Discover amazing items and participate in exciting auctions.</p>
-    
-    <!-- Live Auctions Section -->
-    <h2>Live Auctions</h2>
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h1 class="text-center mb-4">歡迎來到拍賣網站！</h1>
+    <p class="text-center">找到喜歡的商品下標！</p>
+
+    <h2 class="mt-5 mb-3">正在進行的拍賣</h2>
     {% if not liveAuctions %}
         <div class="alert alert-info" role="alert">
-            There are no live auctions at the moment. Check back later!
+            目前沒有正在進行的拍賣
         </div>
     {% else %}
-    <div class="auctions-container" style="max-height: 600px; overflow-y: auto;">
+    <div class="row">
         {% for auction in liveAuctions %}
-        <a href="{% url 'auction_detail' auction.auction_id %}" style="text-decoration: none; color: inherit;">
-            <div class="card mb-3 live-auction" style="max-width: 540px;">
-                <!-- Auction Card Content -->
-                <div class="row g-0">
-                    <div class="col-md-4">
+        <div class="col-md-6 col-lg-4 mb-4">
+            <a href="{% url 'auction_detail' auction.auction_id %}" class="text-decoration-none text-dark">
+                <div class="card h-100 shadow-sm" style="background-color: #e8f5e9;">                    
+                    <div class="card-img-container">
                         {% if auction.image %}
-                            <img src="{{ auction.image.url }}" class="img-fluid rounded-start" alt="{{ auction.title }}">
+                        <img src="{{ auction.image.url }}" alt="{{ auction.title }}" class="card-img">
                         {% endif %}
                     </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ auction.title }}</h5>
-                            <p class="card-text">{{ auction.description }}</p>
-                            <p class="card-text"><small class="text-muted">Starting bid: {{ auction.starting_bid }}</small></p>
-                            {% if auction.current_bid %}
-                                <p class="card-text"><small class="text-muted">Current bid: {{ auction.current_bid }}</small></p>
-                            {% endif %}
-                            <p class="card-text"><small class="text-muted">Ends on: {{ auction.end_time }}</small></p>
-                        </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ auction.title }}</h5>
+                        <p class="card-text">{{ auction.description }}</p>
+                        <p class="card-text"><small class="text-muted">起標價：{{ auction.starting_bid }}</small></p>
+                        {% if auction.current_bid %}
+                            <p class="card-text"><small class="text-muted">目前價格：{{ auction.current_bid }}</small></p>
+                        {% endif %}
+                        <p class="card-text"><small class="text-muted">將於 {{ auction.end_time }} 結束</small></p>
                     </div>
                 </div>
-            </div>
-        </a>
-    {% endfor %}
+            </a>
+        </div>
+        {% endfor %}
     </div>
     {% endif %}
     
     <!-- Ended Auctions Section -->
-    <h2>Ended Auctions</h2>
+    <h2 class="mt-5 mb-3">已結束的拍賣</h2>
     {% if not endedAuctions %}
         <div class="alert alert-info" role="alert">
-            There are no ended auctions at the moment.
+            目前沒有結束的拍賣
         </div>
     {% else %}
-    <div class="auctions-container" style="max-height: 600px; overflow-y: auto;">
+    <div class="row">
         {% for auction in endedAuctions %}
-            <a href="{% url 'auction_detail' auction.auction_id %}" style="text-decoration: none; color: inherit;">
-                <div class="card mb-3 ended-auction" style="max-width: 540px;">
-                    <!-- Auction Card Content -->
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            {% if auction.image %}
-                                <img src="{{ auction.image.url }}" class="img-fluid rounded-start" alt="{{ auction.title }}">
-                            {% endif %}
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ auction.title }}</h5>
-                                <p class="card-text">{{ auction.description }}</p>
-                                <p class="card-text"><small class="text-muted">Starting bid: {{ auction.starting_bid }}</small></p>
-                                {% if auction.current_bid %}
-                                    <p class="card-text"><small class="text-muted">Final bid: {{ auction.current_bid }}</small></p>
-                                {% endif %}
-                                <p class="card-text"><small class="text-muted">Ended at: {{ auction.end_time }}</small></p>
-                            </div>
-                        </div>
+        <div class="col-md-6 col-lg-4 mb-4">
+            <a href="{% url 'auction_detail' auction.auction_id %}" class="text-decoration-none text-dark">
+                <div class="card h-100 shadow-sm" style="background-color: #ffebee;">
+                    <div class="card-img-container">
+                        {% if auction.image %}
+                        <img src="{{ auction.image.url }}" alt="{{ auction.title }}" class="card-img">
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ auction.title }}</h5>
+                        <p class="card-text">{{ auction.description }}</p>
+                        <p class="card-text"><small class="text-muted">起標價：{{ auction.starting_bid }}</small></p>
+                        {% if auction.current_bid %}
+                            <p class="card-text"><small class="text-muted">得標價格：{{ auction.current_bid }}</small></p>
+                        {% endif %}
+                        <p class="card-text"><small class="text-muted">結束於：{{ auction.end_time }}</small></p>
                     </div>
                 </div>
             </a>
+        </div>
         {% endfor %}
     </div>
     {% endif %}

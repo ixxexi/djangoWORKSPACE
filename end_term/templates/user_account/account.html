@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Account{% endblock %}
+{% block content %}
+
+<div class="container-fluid py-5">
+    <div class="row">
+        <div class="col-12 text-right mb-4">
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary" name="logout">登出</button>
+            </form>
+        </div>
+    </div>
+    <div class="text-center mb-5">
+        <h1>你好，<b>{{ request.user.username }}</b></h1>
+        <p class="lead">你的UserID：<b>{{ request.user.id }}</b></p>
+    </div>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">你發起的拍賣</h2>
+            {% if auctions %}
+                <ul class="list-group list-group-flush">
+                    {% for auction in auctions %}
+                        <li class="list-group-item">
+                            <h5 class="mb-1"><a href="{% url 'auction_detail' auction.auction_id %}" class="stretched-link">{{ auction.title }}</a></h5>
+                            <p class="mb-2 text-muted">{{ auction.description|default:"無" }}</p>
+                            <small>在 {{ auction.end_time }} 結束</small>
+                            <form action="{% url 'delete_auction' auction.auction_id %}" method="post" class="mt-2">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('確定刪除?');">刪除</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    你還沒發起任何拍賣
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
