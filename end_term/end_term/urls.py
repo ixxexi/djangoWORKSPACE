@@ -31,5 +31,6 @@ urlpatterns = [
     path('login/', account_views.Login, name='login'),
     path('register/', account_views.Register, name='register'),
     re_path(r"^captcha/", include("captcha.urls")),
+    path('auction/<int:auction_id>/', mainsite_views.auction_detail, name='auction_detail'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

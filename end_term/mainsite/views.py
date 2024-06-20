@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.utils import timezone
@@ -19,4 +19,12 @@ def Index(request):
         'now': timezone.now(),
     }
     return render(request, 'index.html', context)
-    return render(request, 'index.html', context)
+
+def auction_detail(request, auction_id):  # Renamed parameter for clarity
+    auction = get_object_or_404(Auctions, auction_id=auction_id)  # Improved error handling
+    bids = Bids.objects.filter(auction=auction).order_by('-bid_amount')
+    context = {
+        'auction': auction,
+        'bids': bids,
+    }
+    return render(request, 'auction_detail.html', context)
