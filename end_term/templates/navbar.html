@@ -1,7 +1,28 @@
-<nav>
-    <ul>
-        <li><a href="{% url 'index' %}">Home</a></li>
-        <li><a href="{% url 'login' %}">Login</a></li>
-        <li><a href="{% url 'register' %}">Register</a></li>
-    </ul>
-</nav>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var sidebar = document.getElementById("sidebar");
+        document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+            if (sidebar.style.width === "250px") {
+                sidebar.style.width = "0";
+            } else {
+                sidebar.style.width = "250px";
+            }
+        });
+        sidebar.addEventListener('mouseenter', function() {
+            sidebar.style.width = "250px";
+        });
+        sidebar.addEventListener('mouseleave', function() {
+            sidebar.style.width = "0";
+        });
+    });
+</script>
+<button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+<div id="sidebar" class="sidebar">
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'account' %}">Account</a></li>
+            <li><a href="{% url 'new_auction' %}">List An Auction</a></li>
+        </ul>
+    </nav>
+</div>
