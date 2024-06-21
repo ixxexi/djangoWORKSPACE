@@ -41,25 +41,12 @@ INSTALLED_APPS = [
     "widget_tweaks",
     "registration",
     "django.contrib.humanize",
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
 ]
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-SITE_ID = 1
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-ACCOUNT_ACTIVATION_DAYS = 7
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "steven68516291@gmail.com"
-EMAIL_HOST_PASSWORD = "enamfndwqfapryhk"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -69,7 +56,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'allauth.account.middleware.AccountMiddleware', 
 ]
 
 ROOT_URLCONF = "end_term.urls"
