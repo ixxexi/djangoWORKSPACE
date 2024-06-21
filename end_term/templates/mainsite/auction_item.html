@@ -70,15 +70,11 @@
     document.addEventListener("DOMContentLoaded", function() {
         const endTimeElement = document.getElementById("auctionEndTime");
         if (endTimeElement) {
-            // Parse the end time as UTC
             const endTimeUTC = new Date(endTimeElement.dataset.endtime.replace(' ', 'T') + 'Z');
             
             const updateCountdown = () => {
                 const now = new Date();
-                // Convert 'now' to UTC by subtracting the timezone offset
                 const nowUTC = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
-        
-                // Calculate the distance between now (in UTC) and the end time in UTC
                 const distance = endTimeUTC - nowUTC;
         
                 if (distance < 0) {
@@ -87,17 +83,14 @@
                     return;
                 }
         
-                // Calculate days, hours, minutes, and seconds
                 const days = Math.floor(distance / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
         
-                // Update the countdown display
                 endTimeElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
             };
         
-            // Start the countdown
             updateCountdown();
             const interval = setInterval(updateCountdown, 1000);
         }

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Auction Site{% endblock %}
-
+{%load humanize%}
 {% block content %}
 <div class="container mt-5 mb-5">
     <h1 class="text-center mb-4">歡迎來到拍賣網站！</h1>
@@ -29,7 +29,7 @@
                         {% if auction.current_bid %}
                             <p class="card-text"><small class="text-muted">目前價格：{{ auction.current_bid }}</small></p>
                         {% endif %}
-                        <p class="card-text"><small class="text-muted">將於 {{ auction.end_time }} 結束</small></p>
+                        <p class="card-text"><small class="text-muted">將於 {{ auction.end_time|naturaltime }} 結束</small></p>
                     </div>
                 </div>
             </a>
@@ -62,7 +62,7 @@
                         {% if auction.current_bid %}
                             <p class="card-text"><small class="text-muted">得標價格：{{ auction.current_bid }}</small></p>
                         {% endif %}
-                        <p class="card-text"><small class="text-muted">結束於：{{ auction.end_time }}</small></p>
+                        <p class="card-text"><small class="text-muted">結束於：{{ auction.end_time|naturaltime }}</small></p>
                     </div>
                 </div>
             </a>
